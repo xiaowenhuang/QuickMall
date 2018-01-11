@@ -2,6 +2,7 @@ package com.sven.controller;
 
 import com.sven.model.User;
 import com.sven.redis.RedisService;
+import com.sven.redis.UserKey;
 import com.sven.result.Result;
 import com.sven.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,16 +46,19 @@ public class HotDeployController {
 
     @RequestMapping("redis/get")
     @ResponseBody
-    public Result<String> redisGet(){
-        String v1 = redisService.get("sven",String.class);
+    public Result<User> redisGet(){
+        User v1 = redisService.get(UserKey.getById,""+1,User.class);
         return Result.success(v1);
     }
 
     @RequestMapping("redis/set")
     @ResponseBody
-    public Result<String> redisSet(){
-        boolean ret = redisService.set("wack","World of Warcraft");
-        String v1 = redisService.get("wack",String.class);
-        return Result.success(v1);
+    public Result<Boolean> redisSet(){
+        User user = new User();
+        user.setId(1);
+        user.setName("1111");
+        redisService.set(UserKey.getById,""+1,user);
+        //String v1 = redisService.get(Prefix, "wack", String.class);
+        return Result.success(true);
     }
 }
