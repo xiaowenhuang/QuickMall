@@ -46,3 +46,12 @@ Network Trash Folder
 Temporary Items
 .apdisk
 .idea/workspace.xml
+target/classes/com/sven/controller/SampleController.class
+target/classes/com/sven/controller/SampleController.class
+target/classes/com/sven/service/MiaoshaUserService.class
+target/classes/com/sven/utils/MD5Util.class
+.idea/workspace.xml
+target/classes/com/sven/controller/SampleController.class
+target/classes/com/sven/utils/MD5Util.class
+target/classes/com/sven/utils/MD5Util.class
+*.class
