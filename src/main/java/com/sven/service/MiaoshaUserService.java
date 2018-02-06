@@ -24,7 +24,7 @@ public class MiaoshaUserService {
             return CodeMsg.SERVER_ERROR;
         }
         String mobile = loginVo.getMobile();
-        String formPass = loginVo.getMobile();
+        String formPass = loginVo.getPassword();
         //判断手机号是否存在
         MiaoshaUser miaoshaUser = getById(Long.parseLong(mobile));
         if (miaoshaUser == null){

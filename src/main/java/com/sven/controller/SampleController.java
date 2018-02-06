@@ -27,7 +27,7 @@ public class SampleController {
     @RequestMapping(value = "say",method = RequestMethod.GET)
     public String say(Model model){
         model.addAttribute("say", "ds");
-        return "imooc";
+        return "hello";
     }
 
     @RequestMapping("db/get")
