@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 @RequestMapping("hot")
-public class HotDeployController {
+public class SampleController {
     @Autowired
     UserService userService;
     @Autowired

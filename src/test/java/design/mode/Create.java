@@ -3,49 +3,98 @@ package design.mode;
 /**
  * Created by sven on 2018/1/11.
  */
-class Product{
-    private String name;
-    private String type;
-    public void show(){
-        System.out.println("参数名："+name);
-        System.out.println("类型："+type);
+class Level{
+    private int level = 0;
+    public Level(int level){
+        this.level = level;
     }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getName() {
-
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public boolean above(Level level){
+        if (this.level >= level.level){
+            return true;
+        }
+        return false;
     }
 }
-interface Build{
-    void setPart(String arg1,String arg2);
-    Product getProduct();
+class Request{
+    Level level;
+    public Request(Level level){
+        this.level = level;
+    }
+    public Level getLevel(){
+        return level;
+    }
 }
-class ConcreteBuild implements Build{
-     Product product = new Product();
+class Response{
+
+}
+abstract class Handler{
+    private Handler nextHandler;
+    public final Response handleRequest(Request request){
+        Response response = null;
+        if (this.getHandlerLevel().above(request.getLevel())){
+            response = this.response(request);
+        }else{
+            if (this.nextHandler!=null){
+                this.nextHandler.handleRequest(request);
+            }else{
+                System.out.println("没有合适的处理器");
+            }
+        }
+        return response;
+    }
+    public void setNextHandler(Handler handler){
+        this.nextHandler = handler;
+    }
+    protected abstract Level getHandlerLevel();
+    public abstract Response response(Request request);
+}
+class ConcreteHandler1 extends Handler{
 
     @Override
-    public void setPart(String arg1, String arg2) {
-        product.setName(arg1);
-        product.setType(arg2);
+    protected Level getHandlerLevel() {
+        return new Level(1);
     }
 
     @Override
-    public Product getProduct() {
-        return product;
+    public Response response(Request request) {
+        System.out.println("请求由处理器1进行处理");
+        return null;
     }
 }
-public class Create {
+class ConcreteHandler2 extends Handler{
 
+    @Override
+    protected Level getHandlerLevel() {
+        return new Level(3);
+    }
+
+    @Override
+    public Response response(Request request) {
+        System.out.println("请求由处理器2进行处理");
+        return null;
+    }
+}
+class ConcreteHandler3 extends Handler{
+
+    @Override
+    protected Level getHandlerLevel() {
+        return new Level(5);
+    }
+
+    @Override
+    public Response response(Request request) {
+        System.out.println("请求由处理器3进行处理");
+        return null;
+    }
+}
+public class Create{
+    public static void main(String[] args) {
+        Handler handler1 = new ConcreteHandler1();
+        Handler handler2 = new ConcreteHandler2();
+        Handler handler3 = new ConcreteHandler3();
+        handler1.setNextHandler(handler2);
+        handler2.setNextHandler(handler3);
+
+        Response response = handler1.handleRequest(new Request(new Level(4)));
+    }
 }
