@@ -1,5 +1,10 @@
 package com.sven.vo;
 
+import com.sven.validator.IsMobile;
+import org.hibernate.validator.constraints.Length;
+
+import javax.validation.constraints.NotNull;
+
 /**
  * Created by sven on 2018/1/21.
  */
@@ -12,7 +17,11 @@ public class LoginVo {
                 '}';
     }
 
+    @NotNull
+    @IsMobile
     private String mobile;
+    @NotNull
+    @Length(min = 32)
     private String password;
 
     public String getMobile() {

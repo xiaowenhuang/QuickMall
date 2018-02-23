@@ -55,3 +55,4 @@ target/classes/com/sven/controller/SampleController.class
 target/classes/com/sven/utils/MD5Util.class
 target/classes/com/sven/utils/MD5Util.class
 *.class
+*.class
