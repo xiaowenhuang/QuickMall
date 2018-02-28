@@ -56,3 +56,6 @@ target/classes/com/sven/utils/MD5Util.class
 target/classes/com/sven/utils/MD5Util.class
 *.class
 *.class
+*.class
+target/classes/com/sven/controller/LoginController.class
+target/classes/com/sven/service/MiaoshaUserService.class

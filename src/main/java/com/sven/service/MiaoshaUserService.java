@@ -1,6 +1,7 @@
 package com.sven.service;
 
 import com.sven.dao.MiaoshaUserDao;
+import com.sven.exception.GlobalException;
 import com.sven.model.MiaoshaUser;
 import com.sven.result.CodeMsg;
 import com.sven.utils.MD5Util;
@@ -19,24 +20,24 @@ public class MiaoshaUserService {
         return miaoshaUserDao.getById(id);
     }
 
-    public CodeMsg login(LoginVo loginVo) {
+    public boolean login(LoginVo loginVo) {
         if (loginVo == null){
-            return CodeMsg.SERVER_ERROR;
+            throw new GlobalException(CodeMsg.SERVER_ERROR);
         }
         String mobile = loginVo.getMobile();
         String formPass = loginVo.getPassword();
         //判断手机号是否存在
         MiaoshaUser miaoshaUser = getById(Long.parseLong(mobile));
         if (miaoshaUser == null){
-            return CodeMsg.MOBILE_NOT_EXIST;
+            throw new GlobalException(CodeMsg.MOBILE_NOT_EXIST);
         }
         //验证密码
         String dbPass = miaoshaUser.getPassword();
         String dbSalt = miaoshaUser.getSalt();
         String calPass = MD5Util.formPassToDBPass(formPass,dbSalt);
         if (!calPass.equals(dbPass)){
-            return CodeMsg.PASSWORD_ERROR;
+             throw new GlobalException(CodeMsg.PASSWORD_ERROR);
         }
-        return CodeMsg.SUCCESS;
+        return true;
     }
 }
