@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * Created by sven on 2018/3/18.
  */
@@ -26,14 +28,21 @@ public class GoodsController {
     MiaoshaUserService miaoshaUserService;
     @Autowired
     RedisService redisService;
+
     @RequestMapping("to_list")
-    public String toLogin(Model model,@CookieValue(value = MiaoshaUserService.COOKIE_NAME_TOKEN,required = false) String cookieToken
-    ,@RequestParam(value=MiaoshaUserService.COOKIE_NAME_TOKEN,required=false)String paramToken){
+    public String list(Model model,MiaoshaUser user){
+        model.addAttribute("user",user);
+        return "goods_list";
+    }
+
+    @RequestMapping("to_detail")
+    public String detail(HttpServletResponse response,Model model,@CookieValue(value = MiaoshaUserService.COOKIE_NAME_TOKEN,required = false) String cookieToken
+            ,@RequestParam(value=MiaoshaUserService.COOKIE_NAME_TOKEN,required=false)String paramToken){
         if(StringUtils.isEmpty(cookieToken)&&StringUtils.isEmpty(paramToken)){
             return "login";
         }
         String token = StringUtils.isEmpty(paramToken)?cookieToken:paramToken;
-        MiaoshaUser user = miaoshaUserService.getByToken(token);
+        MiaoshaUser user = miaoshaUserService.getByToken(token,response);
         model.addAttribute("user",user);
         return "goods_list";
     }

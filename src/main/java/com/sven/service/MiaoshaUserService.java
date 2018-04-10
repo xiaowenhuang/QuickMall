@@ -49,6 +49,22 @@ public class MiaoshaUserService {
         if (!calPass.equals(dbPass)){
              throw new GlobalException(CodeMsg.PASSWORD_ERROR);
         }
+        addCookie(miaoshaUser,response);
+        return true;
+    }
+
+    public MiaoshaUser getByToken(String token,HttpServletResponse response) {
+        if (StringUtils.isEmpty(token)){
+            return null;
+        }
+        MiaoshaUser user = redisService.get(MiaoshaUserKey.token,token,MiaoshaUser.class);
+        //延长有效期
+        if (user!=null) {
+            addCookie(user, response);
+        }
+        return user;
+    }
+    private void addCookie(MiaoshaUser miaoshaUser,HttpServletResponse response){
         //生成cookie
         String token = UUIDUtil.uuid();
         redisService.set(MiaoshaUserKey.token,token,miaoshaUser);
@@ -56,13 +72,5 @@ public class MiaoshaUserService {
         cookie.setMaxAge(MiaoshaUserKey.token.expireSeconds());
         cookie.setPath("/");
         response.addCookie(cookie);
-        return true;
-    }
-
-    public MiaoshaUser getByToken(String token) {
-        if (StringUtils.isEmpty(token)){
-            return null;
-        }
-        return redisService.get(MiaoshaUserKey.token,token,MiaoshaUser.class);
     }
 }
