@@ -4,7 +4,9 @@ import com.sven.model.MiaoshaUser;
 import com.sven.model.User;
 import com.sven.redis.MiaoshaUserKey;
 import com.sven.redis.RedisService;
+import com.sven.service.GoodsService;
 import com.sven.service.MiaoshaUserService;
+import com.sven.vo.Goodsvo;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * Created by sven on 2018/3/18.
@@ -29,9 +32,15 @@ public class GoodsController {
     @Autowired
     RedisService redisService;
 
+    @Autowired
+    GoodsService goodsService;
+
     @RequestMapping("to_list")
     public String list(Model model,MiaoshaUser user){
         model.addAttribute("user",user);
+        //query goods table
+        List<Goodsvo> goodsVo = goodsService.listGoodsVo();
+        model.addAttribute("goodsList",goodsVo);
         return "goods_list";
     }
 
